@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Imperial House</title>
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="/View/assets/style.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-title">IMPERIAL HOUSE</div>
+    <div class="topbar-items">
+      <button class="topbar-item">⚙️</button>
+      <button class="topbar-item">👤</button>
+      <button class="topbar-item" onclick="openRightMenu()">Menu</button>
+    </div>
+  </div>
+
+  <!-- Right Menu -->
+  <div id="rightMenu" class="right-menu">
+    <div class="right-menu-header">
+      <div class="right-menu-title">Navigation</div>
+      <button class="right-menu-close" onclick="closeRightMenu()">✖</button>
+    </div>
+    <ul class="right-menu-nav">
+      <li class="right-menu-item active">DASHBOARD</li>
+      <li class="right-menu-item">RESIDENTS</li>
+      <li class="right-menu-item">ANALYTICS</li>
+      <li class="right-menu-item">REPORTS</li>
+    </ul>
+  </div>
+  <div id="rightMenuOverlay" class="right-menu-overlay" onclick="closeRightMenu()"></div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Location Cards Section -->
+    <section id="section-locations" class="screen-section active-section">
+      <h2 class="section-title">Locations</h2>
+      <div class="location-cards-container">
+        <div class="location-card" data-location="Batangas">Batangas</div>
+        <div class="location-card" data-location="Bicol">Bicol</div>
+        <div class="location-card" data-location="Cabanatuan">Cabanatuan</div>
+        <div class="location-card" data-location="Cavite">Cavite</div>
+        <div class="location-card" data-location="LasPinas">Las Piñas</div>
+      </div>
+
+      <!-- Leaflet Map Container -->
+      <div id="mapContainer"></div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="section-dashboard" class="screen-section">
+      <h2>Dashboard</h2>
+      <div class="site-plan-container">
+        <div id="leftBlocks"></div>
+        <div id="rightBlocks"></div>
+      </div>
+    </section>
+
+    <section id="section-residents" class="screen-section">
+      <h2 class="section-title">Residents</h2>
+      <div class="resident-search">
+        <input type="text" id="residentSearch" placeholder="Search by name..." />
+      </div>
+      <div id="residentsContainer" class="residents-container"></div>
+    </section>
+
+    <section id="section-analytics" class="screen-section">
+      <h2>Analytics</h2>
+      <p>Analytics content goes here...</p>
+    </section>
+
+    <section id="section-reports" class="screen-section">
+      <h2>Reports</h2>
+      <p>Reports content goes here...</p>
+    </section>
+
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h3 id="modalTitle"></h3>
+      <p id="modalContent"></p>
+      <button id="modalClose">Close</button>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Your JS -->
+  <script src="../javascript/map.js"></script>
+  <script src="../javascript/app.js"></script>
+
+</body>
+</html>

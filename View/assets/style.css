@@ -1,0 +1,336 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+.topbar {
+  height: 60px;
+  background: #d49006;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  position: relative;
+  z-index: 1002;
+}
+
+.topbar-title {
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.topbar-items button {
+  background: #16213e;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+/* =========================
+   RIGHT MENU (SYSTEM NAV)
+========================= */
+.right-menu {
+  position: fixed;
+  top: 60px; /* below topbar */
+  right: -260px;
+  width: 260px;
+  height: calc(100% - 60px);
+  background: #1a1a2e;
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s ease;
+  z-index: 1100;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.3);
+}
+
+.right-menu.open {
+  right: 0;
+}
+
+.right-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.right-menu-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffd000;
+}
+
+.right-menu-close {
+  background: #e94560;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.right-menu-nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.right-menu-item {
+  padding: 12px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #ccc;
+  transition: background 0.2s, color 0.2s;
+}
+
+.right-menu-item:hover {
+  background: #2d2d50;
+  color: #fff;
+}
+
+.right-menu-item.active {
+  background: #efa506;
+  color: #fff;
+}
+
+/* Overlay for right menu */
+.right-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1099;
+}
+
+.right-menu-overlay.show {
+  display: block;
+}
+
+/* =========================
+   GLOBAL OVERLAY (for sidebar etc)
+========================= */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 998;
+}
+
+.overlay.show {
+  display: block;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.main-content {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #f5f5f5;
+  padding: 16px;
+}
+
+/* =========================
+   SCREEN SECTIONS
+========================= */
+.screen-section {
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.screen-section.active-section {
+  display: block;
+}
+
+.screen-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
+/* =========================
+   LOCATION CARDS
+========================= */
+.location-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.location-card {
+  background: #2a2a5a;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  min-width: 180px;
+  max-width: 220px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.location-card:hover {
+  background: #3b3b7a;
+  transform: translateY(-4px);
+}
+
+.location-card:active {
+  transform: translateY(1px);
+}
+
+.location-card:focus {
+  outline: none;
+}
+
+/* =========================
+   RESIDENTS SECTION
+========================= */
+.resident-search {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.resident-search input {
+  width: 80%;
+  max-width: 320px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* =========================
+   MODAL
+========================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  background: #ffd000;
+  padding: 16px;
+  border-radius: 10px;
+  width: 260px;
+  text-align: center;
+  color: #1a1a2e;
+  font-weight: 700;
+}
+
+.modal button {
+  margin-top: 12px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #e94560;
+  color: white;
+  cursor: pointer;
+}
+
+.modal button:hover {
+  background: #c63950;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* =========================
+   LEAFLET MAP
+========================= */
+#mapContainer {
+  width: 100%;
+  height: 500px; /* must have height */
+  display: none;
+  margin-top: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+
+/* Leaflet default controls adjustment (optional) */
+.leaflet-control-zoom,
+.leaflet-control-attribution {
+  font-size: 14px;
+}
+
+/* =========================
+   CUSTOM MAP PIN
+========================= */
+
+.custom-pin {
+  background: transparent;
+  border: none;
+}
+
+.custom-pin .pin {
+  width: 14px;
+  height: 14px;
+  background: #d49006;
+  border: 2px solid #16213e;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+.custom-pin .pin:hover {
+  transform: scale(1.2);
+}
+
+.custom-pin .pin::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 6px;
+  background: #16213e;
+}
+
