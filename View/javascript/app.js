@@ -1,41 +1,34 @@
-// =========================
-// SIDEBAR LOGIC
-// =========================
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
-const closeBtn = document.getElementById("sidebarClose");
-const menuToggle = document.getElementById("menuToggle");
+document.addEventListener("DOMContentLoaded", () => {
 
-function openSidebar() {
-  sidebar?.classList.add("open");
-  overlay?.classList.add("show");
-}
+  // =========================
+  // SIDEBAR LOGIC
+  // =========================
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  const closeBtn = document.getElementById("sidebarClose");
+  const menuToggle = document.getElementById("menuToggle");
 
-function closeSidebar() {
-  sidebar?.classList.remove("open");
-  overlay?.classList.remove("show");
-}
-
-function toggleSidebar() {
-  sidebar?.classList.toggle("open");
-  overlay?.classList.toggle("show");
-}
-
-// Events
-menuToggle?.addEventListener("click", toggleSidebar);
-closeBtn?.addEventListener("click", closeSidebar);
-overlay?.addEventListener("click", closeSidebar);
-
-// ESC key closes sidebar or modal
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    if (sidebar?.classList.contains("open")) closeSidebar();
-    if (modalOverlay?.classList.contains("show")) closeModal();
-    if (rightMenu?.classList.contains("open")) closeRightMenu();
+  function openSidebar() {
+    sidebar?.classList.add("open");
+    overlay?.classList.add("show");
   }
-});
 
-// =========================
+  function closeSidebar() {
+    sidebar?.classList.remove("open");
+    overlay?.classList.remove("show");
+  }
+
+  function toggleSidebar() {
+    sidebar?.classList.toggle("open");
+    overlay?.classList.toggle("show");
+  }
+
+  menuToggle?.addEventListener("click", toggleSidebar);
+  closeBtn?.addEventListener("click", closeSidebar);
+  overlay?.addEventListener("click", closeSidebar);
+
+
+  // =========================
 // MODAL LOGIC
 // =========================
 const modalOverlay = document.getElementById("modalOverlay");
@@ -50,124 +43,97 @@ function closeModal() {
 modalClose?.addEventListener("click", closeModal);
 
 // =========================
-// LOCATION CARDS
+// OPEN LOT MODAL
 // =========================
-const locationCards = document.querySelectorAll(".location-card");
+function openLotModal(block, lot) {
+  const residentsInLot = residents.filter(r => r.block === block && r.lot === lot);
 
-locationCards.forEach(card => {
-  card.addEventListener("click", () => {
-    const location = card.dataset.location;
-    if (!location) return;
+  modalTitle.innerText = `Block ${block} - Lot ${lot}`;
 
-    modalTitle.innerText = `${location} Information`;
-    modalContent.innerHTML = `
-      <p>Details for the location: <strong>${location}</strong></p>
-      <p>You can display more info here, e.g., population, number of residents, etc.</p>
-    `;
-    modalOverlay.classList.add("show");
-  });
-});
+  let contentHTML = `
+    <div class="detail-group">
+      <b>Address:</b> Via Verde-Homapon 2
+    </div>
 
-// =========================
-// RESIDENTS LOGIC
-// =========================
-const residentsContainer = document.getElementById("residentsContainer");
-const residentSearch = document.getElementById("residentSearch");
+    <div class="detail-group">
+      <b>Property:</b> Block ${block} | Lot ${lot}
+    </div>
+  `;
 
-// Sample residents data (replace with your actual data)
-const residents = [
-  { name: "John Doe", block: "A", lot: "1", status: "active" },
-  { name: "Jane Smith", block: "B", lot: "3", status: "inactive" },
-  { name: "Mark Lee", block: "A", lot: "2", status: "active" },
-];
-
-function renderResidents(filter = "") {
-  if (!residentsContainer) return;
-
-  residentsContainer.innerHTML = "";
-
-  const filtered = residents.filter(resident =>
-    resident.name.toLowerCase().includes(filter.toLowerCase())
-  );
-
-  filtered.forEach(resident => {
-    const row = document.createElement("div");
-    row.className = "resident-card";
-
-    row.innerHTML = `
-      <div>
-        <div class="resident-name">${resident.name}</div>
-        <div class="resident-lot">${resident.block} – ${resident.lot}</div>
+  if (residentsInLot.length === 0) {
+    contentHTML += `
+      <div class="detail-group">
+        <b>Client:</b> —
       </div>
-      <div class="resident-status-badge ${resident.status}">
-        ${capitalize(resident.status)}
+      <div class="detail-group">
+        <b>Status:</b>
+        <span class="status-tag">No Residents</span>
+      </div>
+      <div class="detail-group">
+        <b style="display:block; margin-bottom:12px;">Billing</b>
+        <div class="bill-row">
+          <span>Electric Bill</span>
+          <span>₱ 0.00</span>
+        </div>
+        <div class="bill-row">
+          <span>Water Bill</span>
+          <span>₱ 0.00</span>
+        </div>
       </div>
     `;
+  } else {
+    const totalElectricity = residentsInLot.reduce((sum, r) => sum + r.electricity, 0);
+    const totalWater = residentsInLot.reduce((sum, r) => sum + r.water, 0);
+    const status = residentsInLot.some(r => r.status === "active") ? "Active" : "Inactive";
+    const residentNames = residentsInLot.map(r => r.name).join(", ");
 
-    // Highlight lot on hover
-    row.addEventListener("mouseenter", () => {
-      document.querySelectorAll(".lot").forEach(lot => {
-        if (lot.dataset.block === resident.block && lot.dataset.lot === resident.lot) {
-          lot.classList.add("highlight");
-        }
-      });
-    });
+    contentHTML += `
+      <div class="detail-group">
+        <b>Client:</b> ${residentNames}
+      </div>
+      <div class="detail-group">
+        <b>Status:</b>
+        <span class="status-tag ${status.toLowerCase()}">${status}</span>
+      </div>
+      <div class="detail-group">
+        <b>Created:</b> ${new Date().toLocaleString()}
+      </div>
+      <div class="detail-group">
+        <b style="display:block; margin-bottom:12px;">Billing</b>
+        <div class="bill-row">
+          <span>Electric Bill</span>
+          <span>₱ ${totalElectricity.toFixed(2)}</span>
+        </div>
+        <div class="bill-row">
+          <span>Water Bill</span>
+          <span>₱ ${totalWater.toFixed(2)}</span>
+        </div>
+      </div>
+    `;
+  }
 
-    row.addEventListener("mouseleave", () => {
-      document.querySelectorAll(".lot").forEach(lot => {
-        lot.classList.remove("highlight");
-      });
-    });
-
-    // Click opens modal with residents in same lot
-    row.addEventListener("click", () => {
-      const residentsInLot = residents.filter(
-        r => r.block === resident.block && r.lot === resident.lot
-      );
-
-      modalTitle.innerText = `${resident.block} - Lot ${resident.lot}`;
-      modalContent.innerHTML = residentsInLot
-        .map(
-          r => `
-            <div class="modal-resident">
-              <strong>${r.name}</strong>
-              <span class="resident-status-badge ${r.status}">${capitalize(r.status)}</span>
-            </div>
-          `
-        )
-        .join("");
-
-      modalOverlay.classList.add("show");
-    });
-
-    residentsContainer.appendChild(row);
-  });
+  modalContent.innerHTML = contentHTML;
+  modalOverlay?.classList.add("show");
 }
 
-function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
+window.openLotModal = openLotModal;
 
-/* Initial render */
-renderResidents();
 
-/* Search input filter */
-residentSearch?.addEventListener("input", () => {
-  renderResidents(residentSearch.value);
+
+  // =========================
+  // RIGHT MENU
+  // =========================
+  const rightMenu = document.getElementById("rightMenu");
+  const rightMenuOverlay = document.getElementById("rightMenuOverlay");
+
+  function openRightMenu() {
+    rightMenu?.classList.add("open");
+    rightMenuOverlay?.classList.add("show");
+  }
+
+  function closeRightMenu() {
+    rightMenu?.classList.remove("open");
+    rightMenuOverlay?.classList.remove("show");
+  }
+
 });
-
-// =========================
-// OPTIONAL: Right Menu Logic
-// =========================
-const rightMenu = document.getElementById("rightMenu");
-const rightMenuOverlay = document.getElementById("rightMenuOverlay");
-
-function openRightMenu() {
-  rightMenu?.classList.add("open");
-  rightMenuOverlay?.classList.add("show");
-}
-
-function closeRightMenu() {
-  rightMenu?.classList.remove("open");
-  rightMenuOverlay?.classList.remove("show");
-}

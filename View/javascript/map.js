@@ -1,19 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   const mapContainer = document.getElementById('mapContainer');
   let map;
   let currentLayer;
   let markersLayer;
 
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalContent = document.getElementById('modalContent');
-
   const locations = {
     Batangas: {
       image: '../assets/img/maps/subdivision1.png',
-      size: [2000, 1500], // [height, width]
+      size: [2000, 1500],
+      block: "A", // <-- IMPORTANT (used for resident matching)
       markers: [
-        // Block 18
+
         { pos: [1144, 602], name: "Lot 63" },
         { pos: [1146, 617], name: "Lot 62" },
         { pos: [1148, 627], name: "Lot 61" },
@@ -22,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { pos: [1154, 658], name: "Lot 58"},
         { pos: [1156, 670], name: "Lot 57" },
         { pos: [1158, 680], name: "Lot 56" },
-        
+
         { pos: [1160, 691], name: "Lot 55" },
         { pos: [1162, 702], name: "Lot 54" },
         { pos: [1164, 714], name: "Lot 53" },
@@ -71,30 +69,24 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   document.querySelectorAll('.location-card').forEach(card => {
+
     card.addEventListener('click', () => {
+
       const loc = card.dataset.location;
       if (loc !== 'Batangas') return;
 
       const data = locations[loc];
 
-      // Show map container
       mapContainer.style.display = 'block';
 
-      // Initialize map once
       if (!map) {
         map = L.map('mapContainer', {
           crs: L.CRS.Simple,
-          minZoom: -2,
+          minZoom: -1,
           maxZoom: 2,
-        });
-
-        // Temporary coordinate logger (remove later)
-        map.on('click', (e) => {
-          console.log('Clicked coordinates:', e.latlng);
         });
       }
 
-      // Remove previous image and markers
       if (currentLayer) map.removeLayer(currentLayer);
       if (markersLayer) markersLayer.clearLayers();
 
@@ -102,15 +94,21 @@ document.addEventListener("DOMContentLoaded", () => {
       currentLayer = L.imageOverlay(data.image, bounds).addTo(map);
       map.fitBounds(bounds);
 
-      // --------------------------
-      // Custom Styled Markers
-      // --------------------------
       markersLayer = L.layerGroup().addTo(map);
 
       data.markers.forEach(m => {
 
+        const lotNumber = m.name.replace("Lot ", "");
+
+        // 🔎 Check residents in this lot
+        const residentsInLot = residents.filter(r =>
+          r.block === data.block && r.lot === lotNumber
+        );
+
+        const isOccupied = residentsInLot.length > 0;
+
         const customIcon = L.divIcon({
-          className: 'custom-pin',
+          className: `custom-pin ${isOccupied ? "occupied" : "vacant"}`,
           html: `<div class="pin"></div>`,
           iconSize: [20, 20],
           iconAnchor: [10, 20]
@@ -119,14 +117,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const marker = L.marker(m.pos, { icon: customIcon })
           .addTo(markersLayer);
 
+        // Tooltip shows resident count
+        marker.bindTooltip(
+          `${m.name} (${residentsInLot.length} resident${residentsInLot.length !== 1 ? "s" : ""})`
+        );
+
+        // Click opens real resident modal
         marker.on('click', () => {
-          modalTitle.textContent = m.name;
-          modalContent.innerHTML = `
-            <p>Details about <strong>${m.name}</strong> in Batangas</p>
-          `;
-          modalOverlay.classList.add('show');
+        openLotModal(data.block, lotNumber); // billing will now show automatically
         });
+
       });
+
     });
+
   });
+
 });
