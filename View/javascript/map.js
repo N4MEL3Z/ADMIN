@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
         { pos: [1172, 760], name: "Lot 49" },
         { pos: [1174, 772], name: "Lot 48" },
         { pos: [1176, 782], name: "Lot 47" },
-        { pos: [1180, 794], name: "Lot 46" },
+        { pos: [1178, 794], name: "Lot 46" },
 
-        { pos: [1183, 802], name: "Lot 45" },
+        { pos: [1180, 802], name: "Lot 45" },
         { pos: [1182, 814], name: "Lot 44" },
         { pos: [1184, 825], name: "Lot 43" },
         { pos: [1186, 835], name: "Lot 42" },
