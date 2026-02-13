@@ -1,70 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   // =========================
-  // SIDEBAR LOGIC
-  // =========================
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlay");
-  const closeBtn = document.getElementById("sidebarClose");
-  const menuToggle = document.getElementById("menuToggle");
-
-  function openSidebar() {
-    sidebar?.classList.add("open");
-    overlay?.classList.add("show");
-  }
-
-  function closeSidebar() {
-    sidebar?.classList.remove("open");
-    overlay?.classList.remove("show");
-  }
-
-  function toggleSidebar() {
-    sidebar?.classList.toggle("open");
-    overlay?.classList.toggle("show");
-  }
-
-  menuToggle?.addEventListener("click", toggleSidebar);
-  closeBtn?.addEventListener("click", closeSidebar);
-  overlay?.addEventListener("click", closeSidebar);
-
-
-  // =========================
-  // MODAL LOGIC
-  // =========================
-  const modalOverlay = document.getElementById("modalOverlay");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalContent = document.getElementById("modalContent");
-  const modalClose = document.getElementById("modalClose");
-
-  function closeModal() {
-    modalOverlay?.classList.remove("show");
-  }
-
-  modalClose?.addEventListener("click", closeModal);
-  modalOverlay?.addEventListener("click", (e) => {
-    if (e.target === modalOverlay) closeModal();
-  });
-
-
-  // =========================
   // OPEN LOT MODAL
   // =========================
-  function openLotModal(block, lot) {
-    const residentsInLot = residents.filter(r => r.block === block && r.lot === lot);
-    modalTitle.innerText = `Block ${block} - Lot ${lot}`;
+  function openLotModal(projectKey, block, lotNumber) {
+    const modalTitle = document.getElementById("modalTitle");
+    const modalContent = document.getElementById("modalContent");
+    const modalOverlay = document.getElementById("modalOverlay");
+
+    if (!modalContent || !modalOverlay) return;
+
+    // Filter residents in this lot
+    const residentsInLot = residents.filter(r =>
+      r.project === projectKey &&
+      r.block === block &&
+      r.lot === lotNumber
+    );
+
+    modalTitle && (modalTitle.innerText = `Block ${block} - Lot ${lotNumber}`);
 
     let contentHTML = `
       <div class="detail-group">
         <b>Address:</b> Via Verde-Homapon 2
       </div>
-
       <div class="detail-group">
-        <b>Property:</b> Block ${block} | Lot ${lot}
+        <b>Property:</b> Block ${block} | Lot ${lotNumber}
       </div>
     `;
 
     if (residentsInLot.length === 0) {
-      // No residents in lot
       contentHTML += `
         <div class="detail-group">
           <b>Client:</b> —
@@ -86,10 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
     } else {
-      // Residents exist
       const totalElectricity = residentsInLot.reduce((sum, r) => sum + r.electricity, 0);
       const totalWater = residentsInLot.reduce((sum, r) => sum + r.water, 0);
-      const status = residentsInLot.some(r => r.status === "active") ? "Active" : "Inactive";
+      const status = residentsInLot.some(r => r.status === "active") ? "active" : "inactive";
       const residentNames = residentsInLot.map(r => r.name).join(", ");
 
       contentHTML += `
@@ -98,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="detail-group">
           <b>Status:</b>
-          <span class="status-tag ${status.toLowerCase()}">${status}</span>
+          <span class="status-tag ${status}">${status}</span>
         </div>
         <div class="detail-group">
           <b>Created:</b> ${new Date().toLocaleString()}
@@ -118,12 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     modalContent.innerHTML = contentHTML;
-    modalOverlay?.classList.add("show");
+    modalOverlay.classList.add("show");
+
+    const modalCloseBtn = document.getElementById("modalClose");
+    modalCloseBtn.onclick = () => modalOverlay.classList.remove("show");
   }
 
-  // Expose globally for map.js to call
+  // Expose globally for map.js
   window.openLotModal = openLotModal;
-
 
   // =========================
   // RIGHT MENU
@@ -131,14 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const rightMenu = document.getElementById("rightMenu");
   const rightMenuOverlay = document.getElementById("rightMenuOverlay");
 
-  function openRightMenu() {
-    rightMenu?.classList.add("open");
-    rightMenuOverlay?.classList.add("show");
-  }
+  window.openRightMenu = function () {
+    rightMenu.classList.add("open");
+    rightMenuOverlay.classList.add("show");
+  };
 
-  function closeRightMenu() {
-    rightMenu?.classList.remove("open");
-    rightMenuOverlay?.classList.remove("show");
-  }
+  window.closeRightMenu = function () {
+    rightMenu.classList.remove("open");
+    rightMenuOverlay.classList.remove("show");
+  };
 
 });

@@ -234,7 +234,6 @@ html, body {
 /* =========================
    CUSTOM MAP PIN
 ========================= */
-
 .custom-pin {
   background: transparent;
   border: none;
@@ -248,10 +247,7 @@ html, body {
   border-radius: 50%;
   position: relative;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  transition: 
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 /* Occupied */
@@ -271,41 +267,37 @@ html, body {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
-/* =========================
-   CUSTOM MAP PIN COLORS
-========================= */
+/* CUSTOM MAP PIN COLORS */
 .custom-pin.active-resident .pin {
-  background-color: #28a745; /* green */
+  background-color: #28a745;
   box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
 }
 
 .custom-pin.inactive-resident .pin {
-  background-color: #dc3545; /* red */
+  background-color: #dc3545;
   box-shadow: 0 0 8px rgba(220, 53, 69, 0.6);
 }
 
 .custom-pin.no-resident .pin {
-  background-color: #ffc107; /* yellow */
+  background-color: #ffc107;
   box-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
 }
 
-/* =========================
-   MODAL STATUS TAG COLORS
-========================= */
-.status-tag.active-resident {
-  color: #28a745; /* green */
+/* MODAL STATUS TAG COLORS */
+.status-tag.active {
+  background-color: #28a745;
 }
 
-.status-tag.inactive-resident {
-  color: #dc3545; /* red */
+.status-tag.inactive {
+  background-color: #dc3545;
 }
 
-.status-tag.no-resident {
-  color: #ffc107; /* yellow */
+.status-tag.vacant {
+  background-color: #ffc107;
+  color: #333;
 }
 
-
-/* =========================
+/* ========================= 
    MODAL
 ========================= */
 .modal-overlay {
@@ -335,7 +327,7 @@ html, body {
 /* SOLID ORANGE TOP BAR */
 .modal-top-bar {
   height: 50px;
-  background: #d49006; /* solid orange */
+  background: #d49006;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -370,7 +362,7 @@ html, body {
 
 .solar-accent {
   width: 10px;
-  background: linear-gradient(to bottom, var(--primary-orange, #d49006), var(--secondary-yellow, #ffd700));
+  background: linear-gradient(to bottom, #d49006, #ffd700);
   border-radius: 20px;
   flex-shrink: 0;
 }
@@ -398,43 +390,6 @@ html, body {
   padding: 8px 0;
   border-bottom: 1px solid #ddd;
 }
-
-.status-tag {
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: white; /* default text color for contrast */
-}
-
-/* Active resident: green */
-.status-tag.active {
-  background-color: #28a745;
-}
-
-/* Inactive resident: red */
-.status-tag.inactive {
-  background-color: #dc3545;
-}
-
-/* No resident: yellow */
-.status-tag.vacant {
-  background-color: #ffc107;
-  color: #333; /* darker text for readability */
-}
-
-
-/* Remove bullets from lists in modal */
-.modal ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 4px 0 8px 0;
-}
-
-.modal ul li {
-  margin-left: 0;
-  padding: 2px 0;
-}
-
 
 
 /* =========================
