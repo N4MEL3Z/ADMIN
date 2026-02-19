@@ -1,6 +1,6 @@
 // residentsData.js
 
-const residents = [
+window.residents = [
 
   // ========================
   // LOT 63 - 60
